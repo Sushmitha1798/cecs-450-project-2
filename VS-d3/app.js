@@ -180,7 +180,7 @@ bio_graph_btn.addEventListener ("click", function() {
 //Create button 4
 var bio_tree_btn = document.createElement("BUTTON");
 bio_tree_btn.id = "bio_tree";
-bio_tree_btn.innerText = "Biomed Graph";
+bio_tree_btn.innerText = "Biomed Tree";
 document.body.appendChild(btnDiv).appendChild(bio_tree_btn);
 
 //button 4 click event
