@@ -63,10 +63,10 @@ public class main {
 			String participant = "p" + participantNum;
 			String currentTreeOutput = treeResultsOutput + participant;
 			String currentGraphOutput = graphResultsOutput + participant;
-			File f3 = new File(currentTreeOutput);
-			f3.mkdir();
-			File f4 = new File(currentGraphOutput);
-			f4.mkdir();
+//			File f3 = new File(currentTreeOutput);
+//			f3.mkdir();
+//			File f4 = new File(currentGraphOutput);
+//			f4.mkdir();
 			String inputLocation = inputURL + participant + "/";
 
 			//FXD data

@@ -99,43 +99,60 @@ public class fixation {
       	   int len = allFixationDurations.size();
       	   int currentLine = -1;
       	   OutputStream f;
-      	   if (tree) {
+      	   OutputStream f2;
+       	   if (tree) {
       		   f = new FileOutputStream(new File(jsonOutput + "TreeData.json"));
+      		   f2 = new FileOutputStream(new File(jsonOutput + "Averages.json"));
       	   }
       	   else {
       		   f = new FileOutputStream(new File(jsonOutput + "GraphData.json"));
-      	   }
-     	   OutputStreamWriter out = new OutputStreamWriter(f);
-     	   JsonWriter writer = new JsonWriter(out);
+      		   f2 = new FileOutputStream(new File(jsonOutput + "Averages.json"));
+      	   } 
+     	  OutputStreamWriter out = new OutputStreamWriter(f);
+     	  OutputStreamWriter out2 = new OutputStreamWriter(f2);
+     	  JsonWriter writer = new JsonWriter(out);
+     	  JsonWriter writer2 = new JsonWriter(out2);
      	   writer.setIndent("\t");
      	   writer.beginArray();
- 		   for (int j = 0; j < len;j++) {
+ 		   for (int j = 0; j < len-1;j++) {
  			   currentLine ++;
  			   writer.beginObject();
  			   writer.name("sequence").value(currentLine+1);
  			   writer.name("duration").value(allFixationDurations.get(currentLine));
- 			   writer.name("x").value(allPoints.get(currentLine).getX());
- 			   writer.name("y").value(allPoints.get(currentLine).getY());
+ 			   writer.name("x1").value(allPoints.get(currentLine).getX());
+ 			   writer.name("y1").value(allPoints.get(currentLine).getY());
+ 			   writer.name("x2").value(allPoints.get(currentLine+1).getX());
+			   writer.name("y2").value(allPoints.get(currentLine+1).getY());
+			   writer.name("saccade").value(saccade.getSaccadeLength(allPoints.get(currentLine).getX(), allPoints.get(currentLine).getY(), allPoints.get(currentLine+1).getX(), allPoints.get(currentLine+1).getY()));
  			   writer.endObject();
  		   }
  		   writer.endArray();
      	   writer.close();
      	   out.close();
      	   f.close();
+     	   
+           writer2.setIndent("\t");
+           writer2.beginObject();
             bufferedWriter.write("total number of fixations: " + getFixationCount(inputFile));
+            writer2.name("totalFixation").value(Integer.parseInt(getFixationCount(inputFile)));
             bufferedWriter.newLine();
             
             bufferedWriter.write("sum of all fixation duration: " + descriptiveStats.getSumOfIntegers(allFixationDurations));
             bufferedWriter.newLine();
+            writer2.name("sumDuration").value(descriptiveStats.getSumOfIntegers(allFixationDurations));
             
             bufferedWriter.write("mean duration: " + descriptiveStats.getMeanOfIntegers(allFixationDurations));
             bufferedWriter.newLine();
+            writer2.name("meanDuration").value(descriptiveStats.getMeanOfIntegers(allFixationDurations));
             
             bufferedWriter.write("median duration: " + descriptiveStats.getMedianOfIntegers(allFixationDurations));
             bufferedWriter.newLine();
             
+            
+            
             bufferedWriter.write("StDev of durations: " + descriptiveStats.getStDevOfIntegers(allFixationDurations));
             bufferedWriter.newLine();
+            writer2.name("stdDuration").value(descriptiveStats.getStDevOfIntegers(allFixationDurations));
             
             bufferedWriter.write("Min. duration: " + descriptiveStats.getMinOfIntegers(allFixationDurations));
             bufferedWriter.newLine();
@@ -149,18 +166,22 @@ public class fixation {
             
             bufferedWriter.write("total number of saccades: " + allSaccadeLengths.length);
             bufferedWriter.newLine();
+            writer2.name("totalNumberSaccades").value(allSaccadeLengths.length);
             
             bufferedWriter.write("sum of all saccade length: " + descriptiveStats.getSum(allSaccadeLengths));
             bufferedWriter.newLine();
+            writer2.name("sumSaccadeLengths").value(descriptiveStats.getSum(allSaccadeLengths));
             
-            bufferedWriter.write("mean saccade length: " + descriptiveStats.getMean(allSaccadeLengths));
+            bufferedWriter.write("mean saccadeLength: " + descriptiveStats.getMean(allSaccadeLengths));
             bufferedWriter.newLine();
+            writer2.name("meanSaccadeLength").value(descriptiveStats.getMean(allSaccadeLengths));
             
             bufferedWriter.write("median saccade length: " + descriptiveStats.getMedian(allSaccadeLengths));
             bufferedWriter.newLine();
             
             bufferedWriter.write("StDev of saccade lengths: " + descriptiveStats.getStDev(allSaccadeLengths));
             bufferedWriter.newLine();
+            writer2.name("stdSaccadeLengths").value(descriptiveStats.getSum(allSaccadeLengths));
             
             bufferedWriter.write("min saccade length: " + descriptiveStats.getMin(allSaccadeLengths));
             bufferedWriter.newLine();
@@ -174,15 +195,18 @@ public class fixation {
             
             bufferedWriter.write("sum of all saccade durations: " + descriptiveStats.getSumOfIntegers(allSaccadeDurations));
             bufferedWriter.newLine();
+            writer2.name("totalSaccadeDuration").value(descriptiveStats.getSumOfIntegers(allSaccadeDurations));
             
             bufferedWriter.write("mean saccade duration: " + descriptiveStats.getMeanOfIntegers(allSaccadeDurations));
             bufferedWriter.newLine();
+            writer2.name("meanSaccadeDuration").value(descriptiveStats.getMeanOfIntegers(allSaccadeDurations));
             
             bufferedWriter.write("median saccade duration: " + descriptiveStats.getMedianOfIntegers(allSaccadeDurations));
             bufferedWriter.newLine();
             
             bufferedWriter.write("StDev of saccade durations: " + descriptiveStats.getStDevOfIntegers(allSaccadeDurations));
             bufferedWriter.newLine();
+            writer2.name("stdSaccadeDurations").value(descriptiveStats.getStDevOfIntegers(allSaccadeDurations));
             
             bufferedWriter.write("Min. saccade duration: " + descriptiveStats.getMinOfIntegers(allSaccadeDurations));
             bufferedWriter.newLine();
@@ -194,11 +218,13 @@ public class fixation {
             
             bufferedWriter.write("scanpath duration: " + getScanpathDuration(allFixationDurations, allSaccadeDurations));
             bufferedWriter.newLine();
+            writer2.name("scanpathDuration").value(descriptiveStats.getStDevOfIntegers(allSaccadeDurations));
             
             bufferedWriter.newLine();
             
             bufferedWriter.write("fixation to saccade ratio: " + getFixationToSaccadeRatio(allFixationDurations, allSaccadeDurations));
             bufferedWriter.newLine();
+            writer2.name("fixationSaccadeRatio:").value(getFixationToSaccadeRatio(allFixationDurations, allSaccadeDurations));
             
             bufferedWriter.newLine();
             
@@ -206,9 +232,11 @@ public class fixation {
             
             bufferedWriter.write("sum of all absolute degrees: " + descriptiveStats.getSumOfDoubles(allAbsoluteDegrees));
             bufferedWriter.newLine();
+            writer2.name("sumAbsoluteDegrees").value(descriptiveStats.getSumOfDoubles(allAbsoluteDegrees));
             
             bufferedWriter.write("mean absolute degree: " + descriptiveStats.getMeanOfDoubles(allAbsoluteDegrees));
             bufferedWriter.newLine();
+            writer2.name("meanAbsoluteDegrees").value(descriptiveStats.getMeanOfDoubles(allAbsoluteDegrees));
             
             bufferedWriter.write("median absolute degree: " + descriptiveStats.getMedianOfDoubles(allAbsoluteDegrees));
             bufferedWriter.newLine();
@@ -228,9 +256,11 @@ public class fixation {
            
             bufferedWriter.write("sum of all relative degrees: " + descriptiveStats.getSumOfDoubles(allRelativeDegrees));
             bufferedWriter.newLine();
+            writer2.name("sumRelativeDegrees").value(descriptiveStats.getSumOfDoubles(allRelativeDegrees));
             
             bufferedWriter.write("mean relative degree: " + descriptiveStats.getMeanOfDoubles(allRelativeDegrees));
             bufferedWriter.newLine();
+            writer2.name("meanRelativeDegrees").value(descriptiveStats.getMeanOfDoubles(allRelativeDegrees));
             
             bufferedWriter.write("median relative degree: " + descriptiveStats.getMedianOfDoubles(allRelativeDegrees));
             bufferedWriter.newLine();
@@ -255,10 +285,14 @@ public class fixation {
             
             bufferedWriter.write("convex hull area: " + convexHull.getPolygonArea(points));
             bufferedWriter.newLine();
-            
+            writer2.name("convex hull area").value(convexHull.getPolygonArea(points));
             
             bufferedWriter.close();
             bufferedReader.close();	
+            writer2.endObject();
+      	    writer2.close();
+      	    out2.close();
+      	    f2.close();
             System.out.println("done writing fixation data to: " + outputFile);
             
         }catch(FileNotFoundException ex) {
