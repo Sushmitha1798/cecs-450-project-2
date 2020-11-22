@@ -1,0 +1,42 @@
+total number of fixations: 4349
+sum of all fixation duration: 1068897.0
+mean duration: 245.7799494136583
+median duration: 179.0
+StDev of durations: 239.05687717998052
+Min. duration: 100.0
+Max. duration: 3848.0
+
+total number of saccades: 4348
+sum of all saccade length: 486544.5794908993
+mean saccadeLength: 111.90077725181676
+median saccade length: 61.63602362043471
+StDev of saccade lengths: 151.0457256039169
+min saccade length: 0.0
+max saccade length: 1070.8636701279954
+
+sum of all saccade durations: 786846.0
+mean saccade duration: 180.96734130634775
+median saccade duration: 60.0
+StDev of saccade durations: 469.9997193863522
+Min. saccade duration: 19.0
+Max. saccade duration: 13238.0
+
+scanpath duration: 1855743.0
+
+fixation to saccade ratio: 1.3584576905773176
+
+sum of all absolute degrees: 151455.1731703264
+mean absolute degree: 34.833296497315175
+median absolute degree: 27.806837332786266
+StDev of absolute degrees: 28.212885363342362
+min absolute degree: 0.0
+max absolute degree: 90.0
+
+sum of all relative degrees: 475414.1814824543
+mean relative degree: 109.36604128880936
+median relative degree: 111.42730345648131
+StDev of relative degrees: 44.55684379373913
+min relative degree: 0.4855458300081336
+max relative degree: 180.0
+
+convex hull area: 1103536.0

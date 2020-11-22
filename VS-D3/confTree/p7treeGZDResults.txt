@@ -1,0 +1,4 @@
+total number of valid recordings: 46697
+average pupil size of left eye: 3.694682870419943
+average pupil size of right eye: 3.5150250123134166
+average pupil size of both eyes: 3.60485394136668

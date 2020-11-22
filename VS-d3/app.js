@@ -6,6 +6,25 @@ var data_shown = false;
 var myColor = d3.scaleOrdinal()
 .range(['#00e6ff', '#0066ff', '#1900ff'])
 myColor.domain([0, 500, 1000]);  
+
+const attributeList = ['totalFixation',
+'sumDuration',
+"meanDuration",
+"stdDuration",
+"totalNumberSaccades",
+"sumSaccadeLengths",
+"meanSaccadeLength",
+"stdSaccadeLengths",
+"totalSaccadeDuration",
+"meanSaccadeDuration",
+"stdSaccadeDurations",
+"scanpathDuration",
+"fixationSaccadeRatio:",
+"sumAbsoluteDegrees",
+"meanAbsoluteDegrees",
+"sumRelativeDegrees",
+"meanRelativeDegrees",
+"convex hull area"];
 var tooltip = d3.select("body")
         .append("div")
         .attr("class", "tooltipDiv")
@@ -107,39 +126,26 @@ svg
     .on('mouseout',function(event,d) {
       d3.select(this)
       .style("font-size",8);
-    })
+    });
 
 }
-
+for (var x in attributeList){
+  console.log(x);
+}
 //Generate Selected Data
-function generateData(graph, selector_id, file_ext)
+function generateData(graph, selector_id, file_ext,avg_ext)
 {
-
-  var data_selector = document.getElementById(selector_id);
+  var data_selector = document.getElementById(selector_id); 
   var pdata = data_selector.options[data_selector.selectedIndex].value;
   var datafile = graph + '/' + pdata + file_ext;
-  var info = d3.json(graph + '/' + pdata + 'Averages.json');
-  //var stats = [{'Total Fixations':info["total fix"]},{'Sum of Durations':info["sum duration"]}];
-  var stats = {'Total Fixations':info["total fix"],'Sum of Durations':info["sum duration"]}
-  //show averages information in top right
-  d3.json(stats).then(data=>{
-    svg
-    .selectAll("legend")
-    .data(data)
-    .enter()
-    .append("text")
-      .attr('x',50)
-      .attr('y', 100)
-      .text( function(d){ return d.name})
-      .style("font-size", 10)
-      .attr('alignment-baseline', 'middle')
-      .style('stroke','white');
-  
-  })
-
+  var avgfile = graph + '/' + pdata + avg_ext;
+  $.getJSON( avgfile, function( data ) {
+    for (var at in attributeList){
+      console.log(at);
+    }
+});
   //graph fixations and saccades
   d3.json(datafile).then(data=>{
-
     // show saccades
     line.data(data)
     .enter().append("line")
@@ -285,14 +291,14 @@ document.body.appendChild(btnDiv).appendChild(conf_graph_btn);
 conf_graph_btn.addEventListener ("click", function() {
   if(data_shown == false)
   {
-    generateData('confGraph', conf_g_select.id, 'GraphData.json');
+    generateData('confGraph', conf_g_select.id, 'GraphData.json','Averages.json');
     data_shown = true;
   }
   else
   {
     canvas.selectAll('*').remove();
     createCanvas();
-    generateData('confGraph', conf_g_select.id, 'GraphData.json');
+    generateData('confGraph', conf_g_select.id, 'GraphData.json','Averages.json');
   }
 });
 
@@ -306,14 +312,14 @@ document.body.appendChild(btnDiv).appendChild(conf_tree_btn);
 conf_tree_btn.addEventListener ("click", function() {
   if(data_shown == false)
   {
-    generateData('confTree', conf_t_select.id, 'TreeData.json');
+    generateData('confTree', conf_t_select.id, 'TreeData.json','Averages.json');
     data_shown = true;
   }
   else
   {
     canvas.selectAll('*').remove();
     createCanvas();
-    generateData('confTree', conf_t_select.id, 'TreeData.json');
+    generateData('confTree', conf_t_select.id, 'TreeData.json','Averages.json');
   }
 });
 
@@ -327,14 +333,14 @@ document.body.appendChild(btnDiv).appendChild(bio_graph_btn);
 bio_graph_btn.addEventListener ("click", function() {
   if(data_shown == false)
   {
-    generateData('bioGraph', bio_g_select.id, 'GraphData.json');
+    generateData('bioGraph', bio_g_select.id, 'GraphData.json','Averages.json');
     data_shown = true;
   }
   else
   {
     canvas.selectAll('*').remove();
     createCanvas();
-    generateData('bioGraph', bio_g_select.id, 'GraphData.json');
+    generateData('bioGraph', bio_g_select.id, 'GraphData.json','Averages.json');
   }
 });
 
@@ -348,14 +354,14 @@ document.body.appendChild(btnDiv).appendChild(bio_tree_btn);
 bio_tree_btn.addEventListener ("click", function() {
   if(data_shown == false)
   {
-    generateData('bioTree', bio_t_select.id, 'TreeData.json');
+    generateData('bioTree', bio_t_select.id, 'TreeData.json','Averages.json');
     data_shown = true;
   }
   else
   {
     canvas.selectAll('*').remove();
     createCanvas();
-    generateData('bioTree', bio_t_select.id, 'TreeData.json');
+    generateData('bioTree', bio_t_select.id, 'TreeData.json','Averages.json');
   }
 });
 conf_graph_btn.click()
