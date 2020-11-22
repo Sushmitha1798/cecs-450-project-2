@@ -1,10 +1,18 @@
 const canvas = d3.select(".canva");
 
-var speed = null;
 var circle = null;
 var line = null;
 var data_shown = false;
-
+var myColor = d3.scaleOrdinal()
+.range(['#00e6ff', '#0066ff', '#1900ff'])
+myColor.domain([0, 500, 1000]);  
+var tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "tooltipDiv")
+        .style("position", "absolute")
+        .style("z-index", "10")
+        .style("visibility", "hidden")
+        .text("");
 //Create canvas
 function createCanvas(){
   const svg = canvas.append("svg")
@@ -15,7 +23,6 @@ function createCanvas(){
   circle = svg.selectAll("circle");
   line = svg.selectAll("line");
 }
-createCanvas();
 
 //Generate Selected Data
 function generateData(graph, selector_id, file_ext)
@@ -24,31 +31,74 @@ function generateData(graph, selector_id, file_ext)
   var pdata = data_selector.options[data_selector.selectedIndex].value;
   var datafile = graph + '/' + pdata + file_ext;
   d3.json(datafile).then(data=>{
-    circle.data(data)
-    .enter().append("circle")
-    .transition()
-    .delay(function(d,i){return  d.sequence * speed;})
-    .attr("r",(d,i) =>d.duration/30)
-    .attr("cx",(d,i) =>d.x1)
-    .attr("cy",(d,i)=>d.y1/1.5)
-    .attr("fill","red")
-    .attr("stroke","green")
-    .attr('stroke-width', 0.2)
-    .attr('fill-opacity',.1);
-
+// show saccades
     line.data(data)
     .enter().append("line")
-    .transition()
-    .delay(function(d,i){return  d.sequence * speed;})
-    .style("stroke", "indigo")
+    .style("stroke", "white")
     .style("stroke-width", 1)
-    .attr("x1", (d,i)=>d.x1)
+    .attr("x1", (d,i)=>d.x1/1.1)
     .attr("y1", (d,i)=>d.y1/1.5)
-    .attr("x2", (d,i)=>d.x2)
+    .attr("x2", (d,i)=>d.x2/1.1)
     .attr("y2", (d,i)=>d.y2/1.5) 
-    .attr("stroke-opacity",.08);
+    .attr("stroke-opacity",.08)
+    .on('mouseover', function(event,d) {
+      d3.select(this)
+      .attr("stroke-width",3)
+      .attr('stroke-opacity',.9);
+      const info = "<b>saccade length :</b>" + d.saccade + "<br>"
+
+      tooltip.html(info);
+      tooltip.style("visibility", "visible");
+    })
+    .on("mousemove", function(d, i) {
+        return tooltip.style("top",
+            (event.pageY-10)+"px")
+                .style("left",(event.pageX+10)+"px");
+    })
+    .on('mouseout', function(d, i){
+      d3.select(this)
+      .attr("stroke-width",1)
+      .attr('stroke-opacity',.08);
+
+        tooltip.style("visibility", "hidden");
+        d3.select('#details').html('');
+    });
+    circle.data(data)
+    .enter().append("circle")
+    .style("fill", function (d) { return myColor(d.duration); } )
+    .attr("r",(d,i) =>d.duration/30)
+    .attr("cx",(d,i) =>d.x1/1.1)
+    .attr("cy",(d,i)=>d.y1/1.5)
+    .attr("stroke","black")
+    .attr('stroke-width', 0.2)
+    .attr('fill-opacity',0.5)
+    .on('mouseover', function(event,d) {
+      d3.select(this)
+      .attr("r",(d,i) =>d.duration/15)
+      .attr('fill-opacity',.9);
+      const info = "<b>Sequence Number :</b>" + d.sequence + "<br>"
+                + "<b>X</b>:" + d.x1+", <b>Y</b>:"+d.y1 + "<br>"
+                + "<b>Duration: </b> " + d.duration + "<br>";
+
+      tooltip.html(info);
+      tooltip.style("visibility", "visible");
+    })
+    .on("mousemove", function(d, i) {
+        return tooltip.style("top",
+            (event.pageY-10)+"px")
+                .style("left",(event.pageX+10)+"px");
+    })
+    .on('mouseout', function(d, i){
+      d3.select(this)
+      .attr("r",(d,i) =>d.duration/30)
+      .attr('fill-opacity',.5);
+
+        tooltip.style("visibility", "hidden");
+        d3.select('#details').html('');
+    });
   })
 }
+
 
 // var div = document.createElement("div");
 // document.body.appendChild(div);
@@ -197,3 +247,6 @@ bio_tree_btn.addEventListener ("click", function() {
     generateData('bioTree', bio_t_select.id, 'TreeData.json');
   }
 });
+conf_graph_btn.click()
+conf_graph_btn.click()
+//createCanvas();
