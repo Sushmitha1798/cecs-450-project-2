@@ -1,17 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+    .heading1
+    {
+        text-align: center;
+        color: White;
+        font-size: 50px;
+    }
+    .tooltipDiv 
+    {
+        position: absolute;
+        text-align: center;
+        width: 150px;
+        height: 50px;
+        padding: 2px;
+        font: 12px sans-serif;
+        background: lightsteelblue;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+    }
+    .b
+    {
+        background: rgb(36, 35, 35) !important;
+    }
+    .top1{
+        top:100px;
+        position: absolute;
+        position:absolute;
+        left: 31.5%;
+    }
+    .top2{
+        top:124px;
+        position:absolute;
+        left: 31.5%;
+        /* transform: translate(-50%, -50%); */
+    }
+    .canva{
+    height:100%;
+    width: 80%;
+    top: 200px;
+    position: absolute;
+    left: 8%;
+    border: solid;
+    border-color: white;
+    }
+select{
+    font-size: 20px;
+}
+button{
+    font-size: 20px;
+}
+</style>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eye Movement Visualization</title>
     <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 </head>
-<body>
-    <div id="dataSelectors"></div>
-    <div id="dataBTNs"></div>
-    <div class = "canva"></div>
+<body class="b">
+    <div class = "heading1"> Ontology Visualization</div>
     <div id="container"></div>
-    <br>
+    <div id="dataSelectors" class="top1"></div>
+    <div id="dataBTNs" class="top2"></div>
+    <div class = "canva"></div>
 </body>
 <script src = "app.js"></script>
 </html>

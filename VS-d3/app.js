@@ -4,7 +4,16 @@ var speed = null;
 var circle = null;
 var line = null;
 var data_shown = false;
-
+var myColor = d3.scaleOrdinal()
+.range(['#00e6ff', '#0066ff', '#1900ff'])
+myColor.domain([0, 500, 1000]);  
+var tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "tooltipDiv")
+        .style("position", "absolute")
+        .style("z-index", "10")
+        .style("visibility", "hidden")
+        .text("");
 //Create canvas
 function createCanvas(){
   const svg = canvas.append("svg")
@@ -15,7 +24,6 @@ function createCanvas(){
   circle = svg.selectAll("circle");
   line = svg.selectAll("line");
 }
-createCanvas();
 
 //Generate Selected Data
 function generateData(graph, selector_id, file_ext)
@@ -26,21 +34,36 @@ function generateData(graph, selector_id, file_ext)
   d3.json(datafile).then(data=>{
     circle.data(data)
     .enter().append("circle")
-    .transition()
-    .delay(function(d,i){return  d.sequence * speed;})
+    .style("fill", function (d) { return myColor(d.duration); } )
     .attr("r",(d,i) =>d.duration/30)
     .attr("cx",(d,i) =>d.x1)
     .attr("cy",(d,i)=>d.y1/1.5)
-    .attr("fill","red")
-    .attr("stroke","green")
+    .attr("stroke","black")
     .attr('stroke-width', 0.2)
-    .attr('fill-opacity',.1);
+    .attr('fill-opacity',0.7)
+    .on('mouseover', function(event,d) {
+      const info = "<b>Sequence Number :</b>" + d.sequence + "<br>"
+                + "<b>X</b>:" + d.x1+", <b>Y</b>:"+d.y1 + "<br>"
+                + "<b>Duration: </b> " + d.duration + "<br>";
+
+      tooltip.html(info);
+      tooltip.style("visibility", "visible");
+    })
+    .on("mousemove", function(d, i) {
+        return tooltip.style("top",
+            (event.pageY-10)+"px")
+                .style("left",(event.pageX+10)+"px");
+    })
+    .on('mouseout', function(d, i){
+        tooltip.style("visibility", "hidden");
+        d3.select('#details').html('');
+    });
 
     line.data(data)
     .enter().append("line")
     .transition()
     .delay(function(d,i){return  d.sequence * speed;})
-    .style("stroke", "indigo")
+    .style("stroke", "white")
     .style("stroke-width", 1)
     .attr("x1", (d,i)=>d.x1)
     .attr("y1", (d,i)=>d.y1/1.5)
@@ -197,3 +220,6 @@ bio_tree_btn.addEventListener ("click", function() {
     generateData('bioTree', bio_t_select.id, 'TreeData.json');
   }
 });
+conf_graph_btn.click()
+conf_graph_btn.click()
+//createCanvas();
