@@ -19,19 +19,128 @@ function createCanvas(){
   .attr('width', "100%")
   .attr('height',"800");
 
-  speed = 1;
   circle = svg.selectAll("circle");
   line = svg.selectAll("line");
+ 
+  //create legend
+  //https://www.d3-graph-gallery.com/graph/bubble_legend.html
+var legendValues = [100,300,600];
+var xCircle = 50;
+var xLabel = 100;
+var yCircle = 735;
+var saccadeLen = [75];
+//add saccade to legend
+svg
+  .selectAll("legend")
+  .data(saccadeLen)
+  .enter()
+  .append("line")
+    .attr('x1', xCircle)
+    .attr('x2', function(d){ return xCircle + d} )
+    .attr('y1', yCircle - 65)
+    .attr('y2', yCircle - 65)
+    .attr('stroke', 'white')
+    .attr('stroke-width',2)
+    .attr('stroke-opacity',.08);
+
+    svg
+  .selectAll("body")
+  .data(saccadeLen)
+  .enter()
+  .append("text")
+    .attr('x', xLabel)
+    .attr('y', yCircle - 55)
+    .text(function(d){ return d} )
+    .style("font-size", 8)
+    .attr('alignment-baseline', 'middle')
+    .style('stroke','white')
+    .on('mouseover',function(event) {
+      d3.select(this)
+      .style("font-size",20);
+    })
+    .on('mouseout',function(event) {
+      d3.select(this)
+      .style("font-size",8);
+    })
+
+//add circles for legend
+svg 
+  .selectAll("legend")
+  .data(legendValues)
+  .enter()
+  .append("circle")
+  .attr("class","legend")
+    .attr("cx", xCircle)
+    .attr("cy", function(d){ return yCircle - d/30;})
+    .attr("r", function(d){ return d/30;})
+    .style("fill", "none")
+    .attr("stroke", "white")
+    .attr("stroke-width",.5);
+// Add legend: segmented lines
+svg
+  .selectAll("legend")
+  .data(legendValues)
+  .enter()
+  .append("line")
+    .attr('x1', function(d){ return xCircle + d/30;} )
+    .attr('x2', xLabel)
+    .attr('y1', function(d){ return yCircle - d/30;})
+    .attr('y2', function(d){ return yCircle - d/30;})
+    .attr('stroke', 'white')
+    .style('stroke-dasharray', ('2,2'));
+// // Add legend: labels
+svg
+  .selectAll("body")
+  .data(legendValues)
+  .enter()
+  .append("text")
+    .attr('x', xLabel)
+    .attr('y', function(d){ return yCircle - d/30;})
+    .text( function(d){ return d} )
+    .style("font-size", 8)
+    .attr('alignment-baseline', 'middle')
+    .style('stroke','white')
+    .on('mouseover',function(event,d) {
+      d3.select(this)
+      .style("font-size",20);
+    })
+    .on('mouseout',function(event,d) {
+      d3.select(this)
+      .style("font-size",8);
+    })
+
 }
 
 //Generate Selected Data
 function generateData(graph, selector_id, file_ext)
 {
+
   var data_selector = document.getElementById(selector_id);
   var pdata = data_selector.options[data_selector.selectedIndex].value;
   var datafile = graph + '/' + pdata + file_ext;
+  var info = d3.json(graph + '/' + pdata + 'Averages.json');
+  //var stats = [{'Total Fixations':info["total fix"]},{'Sum of Durations':info["sum duration"]}];
+  var stats = {'Total Fixations':info["total fix"],'Sum of Durations':info["sum duration"]}
+  //show averages information in top right
+  d3.json(stats).then(data=>{
+    svg
+    .selectAll("legend")
+    .data(data)
+    .enter()
+    .append("text")
+      .attr('x',50)
+      .attr('y', 100)
+      .text( function(d){ return d.name})
+      .style("font-size", 10)
+      .attr('alignment-baseline', 'middle')
+      .style('stroke','white');
+  
+  })
+
+  //graph fixations and saccades
   d3.json(datafile).then(data=>{
-// show saccades
+
+    // show saccades
     line.data(data)
     .enter().append("line")
     .style("stroke", "white")
@@ -63,6 +172,8 @@ function generateData(graph, selector_id, file_ext)
         tooltip.style("visibility", "hidden");
         d3.select('#details').html('');
     });
+
+    //show fixation points
     circle.data(data)
     .enter().append("circle")
     .style("fill", function (d) { return myColor(d.duration); } )
@@ -249,4 +360,4 @@ bio_tree_btn.addEventListener ("click", function() {
 });
 conf_graph_btn.click()
 conf_graph_btn.click()
-//createCanvas();
+

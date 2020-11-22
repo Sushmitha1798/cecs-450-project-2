@@ -19,33 +19,55 @@
         border: 0px;
         border-radius: 8px;
         pointer-events: none;
-        animation: false;
     }
     .b
     {
         background: rgb(36, 35, 35) !important;
     }
     .top1{
-        top:100px;
+        top:80px;
         position: absolute;
         position:absolute;
         left: 31.5%;
     }
     .top2{
-        top:124px;
+        top:104px;
         position:absolute;
         left: 31.5%;
         /* transform: translate(-50%, -50%); */
     }
+    .legend {
+    height: 10%;
+    width: 25%;
+    top: 50px;
+    position:absolute;
+    left: 65%;
+    border: solid;
+    border-color: white;
+}
     .canva{
     height:100%;
-    width: 80%;
-    top: 200px;
+    width: 90%;
+    top: 150px;
     position: absolute;
-    left: 8%;
+    left: 5%;
     border: solid;
     border-color: white;
     }
+    .average{
+    position: absolute;
+    top:210px;
+    right: 12%
+    }
+    fieldset {
+    height: 14%;
+    width: 10%;
+    top:103.5%;
+    position:absolute;
+    left: 5%;
+    border: solid;
+    border-color: white;
+}
 select{
     font-size: 20px;
 }
@@ -54,6 +76,9 @@ button{
 }
 </style>
 <head>
+    <fieldset>
+        <legend style="color: white;"> Legend </legend>
+    </fieldset>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eye Movement Visualization</title>
