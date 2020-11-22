@@ -1,0 +1,20 @@
+{
+	"total fix": "2711",
+	"sum duration": 673240.0,
+	"mean duration": 248.3364072298045,
+	"std of duration": 188.01250762802505,
+	"total number saccades": 2710,
+	"sum of saccade lengths": 329796.11874189595,
+	"mean saccade length": 121.69598477560736,
+	"StDev of saccade lengths": 329796.118741895,
+	"total saccade duration": 333584.0,
+	"mean saccade duration": 123.09372693726937,
+	"Stdev saccade durations": 259.0302129755654,
+	"scanpath duration": 259.0302129755654,
+	"fixation to saccade ratio:": 2.0182023118614802,
+	"sum of absolute degrees": 93049.03190281533,
+	"mean of absolute degrees": 34.33543612650012,
+	"sum of relative degrees": 300839.1468780615,
+	"mean of relative degrees": 111.05173380511684,
+	"convex hull area": 917215.0
+}

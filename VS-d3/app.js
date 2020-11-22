@@ -11,7 +11,7 @@ function createCanvas(){
   .attr('width', "100%")
   .attr('height',"800");
 
-  speed = 2;
+  speed = 1;
   circle = svg.selectAll("circle");
   line = svg.selectAll("line");
 }
