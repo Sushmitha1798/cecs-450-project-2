@@ -1,5 +1,4 @@
 const canvas = d3.select(".canva");
-
 var circle = null;
 var line = null;
 var data_shown = false;
@@ -32,6 +31,16 @@ var tooltip = d3.select("body")
         .style("z-index", "10")
         .style("visibility", "hidden")
         .text("");
+
+function display(filepath){
+  $.getJSON( filepath, function( data ) {
+    var msl=data['meanSaccadeLength'];
+    var ratio=data['fixationSaccadeRatio:'];
+    p=document.getElementById('para1');
+    p.innerText="Mean Scanpath length   :"+Math.floor(msl)+"\nFixation to Saccade Ratio :"+Number(ratio).toFixed(3);
+    p.setAttribute("style","visibility:visible;color:white")
+});
+}
 //Create canvas
 function createCanvas(){
   const svg = canvas.append("svg")
@@ -213,10 +222,9 @@ function generateData(graph, selector_id, file_ext,avg_ext)
         tooltip.style("visibility", "hidden");
         d3.select('#details').html('');
     });
-  })
+})
+
 }
-
-
 // var div = document.createElement("div");
 // document.body.appendChild(div);
 var selectorDiv = document.getElementById('dataSelectors');
@@ -293,12 +301,17 @@ conf_graph_btn.addEventListener ("click", function() {
   {
     generateData('confGraph', conf_g_select.id, 'GraphData.json','Averages.json');
     data_shown = true;
+    
   }
   else
   {
     canvas.selectAll('*').remove();
     createCanvas();
     generateData('confGraph', conf_g_select.id, 'GraphData.json','Averages.json');
+    var data_selector = document.getElementById(conf_g_select.id); 
+    var pdata = data_selector.options[data_selector.selectedIndex].value;
+    display("confGraph/"+pdata+"Averages.json");
+    
   }
 });
 
@@ -320,6 +333,9 @@ conf_tree_btn.addEventListener ("click", function() {
     canvas.selectAll('*').remove();
     createCanvas();
     generateData('confTree', conf_t_select.id, 'TreeData.json','Averages.json');
+    var data_selector = document.getElementById(conf_t_select.id); 
+    var pdata = data_selector.options[data_selector.selectedIndex].value;
+    display("confTree/"+pdata+"Averages.json");
   }
 });
 
@@ -341,6 +357,9 @@ bio_graph_btn.addEventListener ("click", function() {
     canvas.selectAll('*').remove();
     createCanvas();
     generateData('bioGraph', bio_g_select.id, 'GraphData.json','Averages.json');
+    var data_selector = document.getElementById(bio_g_select.id); 
+    var pdata = data_selector.options[data_selector.selectedIndex].value;
+    display("bioGraph/"+pdata+"Averages.json");
   }
 });
 
@@ -362,6 +381,9 @@ bio_tree_btn.addEventListener ("click", function() {
     canvas.selectAll('*').remove();
     createCanvas();
     generateData('bioTree', bio_t_select.id, 'TreeData.json','Averages.json');
+    var data_selector = document.getElementById(bio_t_select.id); 
+    var pdata = data_selector.options[data_selector.selectedIndex].value;
+    display("bioTree/"+pdata+"Averages.json");
   }
 });
 conf_graph_btn.click()

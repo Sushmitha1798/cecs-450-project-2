@@ -74,17 +74,26 @@ select{
 button{
     font-size: 20px;
 }
+.bottom{
+    visibility='hidden';
+}
+.p1{
+    border: solid;
+    border-color: white;
+    width: 250px;
+}
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <head>
     <fieldset>
         <legend style="color: white;"> Legend </legend>
-    </fieldset>
+        </fieldset>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eye Movement Visualization</title>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body class="b">
     <div class = "heading1"> Ontology Visualization</div>
@@ -92,6 +101,7 @@ button{
     <div id="dataSelectors" class="top1"></div>
     <div id="dataBTNs" class="top2"></div>
     <div class = "canva"></div>
+    <p class = "p1" id="para1" style="visibility: hidden;" ></p>
 </body>
 <script src = "app.js"></script>
 </html>
